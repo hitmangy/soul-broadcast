@@ -89,6 +89,9 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+    #lovable-badge {
+    display: none !important;
+  }
   }
 
   body {
