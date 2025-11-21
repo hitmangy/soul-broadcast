@@ -3,7 +3,6 @@ import { Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { RadioStation, Language } from "@/types/radio";
 import { languages } from "@/data/languages";
-import { LanguageSelector } from "@/components/LanguageSelector";
 import { StationCard } from "@/components/StationCard";
 import { NowPlayingBar } from "@/components/NowPlayingBar";
 import { useToast } from "@/hooks/use-toast";
@@ -11,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  const selectedLanguage = languages.find(lang => lang.code === "ar")!;
   const [stations, setStations] = useState<RadioStation[]>([]);
   const [currentStation, setCurrentStation] = useState<RadioStation | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -160,15 +159,6 @@ const Index = () => {
       });
     }, 1000);
   };
-
-  if (!selectedLanguage) {
-    return (
-      <LanguageSelector
-        languages={languages}
-        onSelectLanguage={setSelectedLanguage}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen pb-32">
