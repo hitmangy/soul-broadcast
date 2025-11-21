@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Info } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { RadioStation, Language } from "@/types/radio";
 import { languages } from "@/data/languages";
 import { StationCard } from "@/components/StationCard";
 import { NowPlayingBar } from "@/components/NowPlayingBar";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Index = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
   const selectedLanguage = languages.find(lang => lang.code === "ar")!;
   const [stations, setStations] = useState<RadioStation[]>([]);
@@ -16,6 +15,7 @@ const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(70);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [showAbout, setShowAbout] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -165,13 +165,10 @@ const Index = () => {
       <header className="sticky top-0 z-10 glass border-b border-white/10 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Quran Radio</h1>
-            <p className="text-sm text-muted-foreground">
-              {selectedLanguage.nativeName}
-            </p>
+            <h1 className="text-2xl font-bold">اذاعات القرآن الكريم</h1>
           </div>
           <button
-            onClick={() => navigate("/about")}
+            onClick={() => setShowAbout(true)}
             className="glass-hover rounded-full p-3"
           >
             <Info className="w-5 h-5" />
@@ -217,6 +214,36 @@ const Index = () => {
           language={selectedLanguage.code}
         />
       )}
+
+      <Dialog open={showAbout} onOpenChange={setShowAbout}>
+        <DialogContent className="glass border-white/10 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">عن التطبيق</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 text-right" dir="rtl">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">اذاعات القرآن الكريم</h3>
+              <p className="text-muted-foreground">
+                استمع إلى محطات الراديو الإسلامية التي تبث القرآن الكريم والمحاضرات الدينية من جميع أنحاء العالم على مدار الساعة.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">المميزات</h3>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>بث مباشر على مدار الساعة</li>
+                <li>مؤقت النوم التلقائي</li>
+                <li>التحكم في مستوى الصوت</li>
+                <li>واجهة سهلة الاستخدام</li>
+              </ul>
+            </div>
+            <div className="pt-4 border-t border-white/10">
+              <p className="text-sm text-muted-foreground text-center">
+                للتواصل: <a href="mailto:ahmed.essa@outlook.it" className="text-primary hover:underline">ahmed.essa@outlook.it</a>
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
